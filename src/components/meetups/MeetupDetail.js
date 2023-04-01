@@ -1,5 +1,4 @@
 import classes from './MeetupDetail.module.css'
-
 function MeetupDetail (props) {
     return(
         <section className={classes.detail}>
@@ -10,5 +9,4 @@ function MeetupDetail (props) {
 </section>
     )
 }
-
 export default MeetupDetail;

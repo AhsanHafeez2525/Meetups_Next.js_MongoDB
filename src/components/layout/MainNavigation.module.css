@@ -7,7 +7,6 @@
     background-color: #77002e;
     padding: 0 10%;
   }
-  
   .logo {
     font-size: 2rem;
     color: white;
@@ -21,17 +20,14 @@
     display: flex;
     align-items: baseline;
   }
-  
   .header li {
     margin-left: 3rem;
   }
-  
   .header a {
     text-decoration: none;
     font-size: 1.5rem;
     color: #fcb8d2;
   }
-  
   .header a:hover,
   .header a:active,
   .header a.active {

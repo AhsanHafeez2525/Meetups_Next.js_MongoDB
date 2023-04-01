@@ -1,25 +1,51 @@
+import Head from 'next/head';
+import { Fragment } from 'react';
+import { MongoClient } from 'mongodb';
 import MeetupList from '../components/meetups/MeetupList'
 
-const DUMMY_MEETUPS = [
-    {
-        id: 'm1',
-        title: 'A First Meetup',
-        image: 'https://img.freepik.com/free-photo/male-coworkers-office-with-lunch_273609-6073.jpg?size=626&ext=jpg&uid=R69842242&semt=ais',
-        address: 'california silicon valley, usa',
-        description: 'This is a first meetup!' 
-    },
-    {
-        id: 'm2',
-        title: 'A Second Meetup',
-        image: 'https://img.freepik.com/free-photo/two-people-using-laptop-meeting-coffee-shop_58466-16793.jpg?size=626&ext=jpg&uid=R69842242&semt=ais',
-        address: 'sans fransisco green park, usa',
-        description: 'This is a second meetup!' 
-    }
-]
+function HomePage (props){
+     return(
+      <Fragment>
+        <Head>
+          <title>React Meetups</title>
+          <meta name='description' content='Browse a huge list of highly active React Meetups!'/>
+        </Head>
+      <MeetupList meetups ={props.meetups}/>
+      </Fragment>
+      
+   )
+}
 
-function HomePage (){
-    return(
-     <MeetupList meetups ={DUMMY_MEETUPS}/>
-    )
+// export async function getServerSideProps(context){
+
+//   const req = context.req;
+//   const res = context.res;
+
+//   return{
+//     props: {
+//       meetups: DUMMY_MEETUPS
+//     }
+//   }
+// }
+
+export async function getStaticProps(){
+  // fetch data from an api
+  const client = await MongoClient.connect('mongodb+srv://ahsansatti786:ahsansatti786@cluster0.uxswwop.mongodb.net/meetups?retryWrites=true&w=majority');
+ const db = client.db();
+
+ const meetupsCollection = db.collection('meetups');
+ const meetups= await meetupsCollection.find().toArray();
+ client.close()
+  return {
+    props: {
+      meetups: meetups.map(meetup =>({
+        title: meetup.title,
+        address: meetup.address,
+        image: meetup.image,
+        id: meetup._id.toString(),
+      }))
+    }, 
+    revalidate: 1
+  };
 }
 export default HomePage;
